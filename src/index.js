@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-let dbName = "umuzi";
+let dbName = "demo";
 let dbHost = "localhost";
 let dbUser = "sephula";
 let dbPass = "1q2w3e4r";
@@ -90,8 +90,8 @@ const addNewVisitor = async (name,age,consultant,comments) =>{
 		consultant: consultant,
 		comments: comments		
 	}
-	
 	const query = await Visitor.create(info)
+	
 	return await query.dataValues //returns newly created visitor
 };
 
@@ -100,15 +100,8 @@ const viewAllVisitors = async () =>{
 	let arr = [];
 	const query  = await Visitor.findAll({attributes: ['id', 'name']})
 	
-	for(let i=0; i<query.length; i++)
-		arr.push(query[i].dataValues)
-
+	query.forEach(elem => arr.push(elem.dataValues))
 	return await arr; //returns array with visitors ids and names
-};
-
-const deleteVisitor = async (id) =>{
-	const query  = await Visitor.destroy({ where: {id: id} })
-	return await query; //returns a number 
 };
 
 const updateVisitor = async (id, name,age,consultant,comments) =>{
@@ -127,23 +120,21 @@ const updateVisitor = async (id, name,age,consultant,comments) =>{
 
 const viewOneVisitor = async (id) =>{
 	const query  = await Visitor.findOne({ where : {id : id} })
+
 	return await query.dataValues; //returns visitor by id
+};
+
+const deleteVisitor = async (id) =>{
+	const query  = await Visitor.destroy({ where: {id: id} })
+
+	return await query; //returns a 1 when row is deleted 
 };
 
 const deleteAllVisitors = async () =>{
 	const query  = await  Visitor.destroy({ where: {} })
+
 	return await query; //returns number of rows deleted
 };
-
-// addNewVisitor("Sephula",30,"Motho Fela1","blah blah blah blah blah blah")
-// addNewVisitor("Pule",25,"Motho Fela2","blah blah blah blah blah blah")
-// addNewVisitor("Mapule",50,"Motho Fela3","blah blah blah blah blah blah")
-// addNewVisitor("Phetetso",56,"Motho Fela4","blah blah blah blah blah blah")
-// viewAllVisitors()
-// deleteVisitor()
-// updateVisitor("13","Sephula",31,"Motho Fela1")
-// viewOneVisitor(13)
-// deleteAllVisitors()
 
 module.exports = {
 	Visitor,
